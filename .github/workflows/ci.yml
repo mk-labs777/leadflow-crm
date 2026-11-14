@@ -1,0 +1,32 @@
+name: LeadFlow checks
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: leadflow
+          POSTGRES_USER: leadflow
+          POSTGRES_PASSWORD: ci-only-ephemeral
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DJANGO_DEBUG: "1"
+      DJANGO_SECRET_KEY: ci-only-not-a-production-secret
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: leadflow
+      POSTGRES_USER: leadflow
+      POSTGRES_PASSWORD: ci-only-ephemeral
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install --require-hashes -r requirements.lock
+      - run: python manage.py check
+      - run: python manage.py makemigrations --check --dry-run
+      - run: python manage.py migrate --noinput
+      - run: pytest -q
+      - run: docker compose build

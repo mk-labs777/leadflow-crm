@@ -1,0 +1,40 @@
+{% extends 'base.html' %}{% block content %}<p class="eyebrow">次のアクション</p>
+<h1>タスク・予定</h1>
+<p class="muted">担当する案件の次のアクションを確認しましょう。</p>
+<div class="two-col">
+<section class="panel">
+<h2>フォローアップタスク</h2>
+<div class="table-responsive">
+<table class="table">
+<thead>
+<tr>
+<th>タスク / 案件</th>
+<th>期限</th>
+<th>状況</th>
+</tr>
+</thead>
+<tbody>{% for task in tasks %}<tr>
+<td>
+<a href="{% url 'task_edit' task.inquiry_id task.pk %}">{{ task.title }}</a>
+<br>
+<a href="{% url 'inquiry_detail' task.inquiry_id %}">
+<small>{{ task.inquiry.subject }}</small>
+</a>
+</td>
+<td>{{ task.due_date|date:'Y/m/d' }}</td>
+<td>{% if task.completed_at %}完了{% elif task.is_overdue %}<span class="danger-text">期限超過</span>{% else %}未完了{% endif %}</td>
+</tr>{% empty %}<tr>
+<td colspan="3" class="empty">タスクはありません。案件詳細から登録できます。</td>
+</tr>{% endfor %}</tbody>
+</table>
+</div>
+</section>
+<section class="panel">
+<h2>今後の現地調査</h2>{% for appointment in appointments %}<p>
+<strong>{{ appointment.starts_at|date:'Y/m/d H:i' }}</strong>
+<br>
+<a href="{% url 'appointment_edit' appointment.inquiry_id appointment.pk %}">{{ appointment.inquiry.subject }}</a>
+<br>
+<small>{{ appointment.location }}</small>
+</p>{% empty %}<p class="empty">今後の予定はありません。</p>{% endfor %}</section>
+</div>{% endblock %}

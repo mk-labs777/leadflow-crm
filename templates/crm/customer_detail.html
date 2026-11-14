@@ -1,0 +1,31 @@
+{% extends 'base.html' %}{% block content %}<div class="page-header">
+<div>
+<p class="eyebrow">顧客プロフィール</p>
+<h1>{{ customer.name }}</h1>{% if not customer.is_active %}<span class="badge-status">アーカイブ済</span>{% endif %}</div>
+<a class="btn btn-outline-secondary" href="{% url 'customer_edit' customer.pk %}">顧客を編集</a>
+</div>
+<div class="two-col">
+<div>
+<section class="panel">
+<h2>顧客情報</h2>
+<dl class="detail-grid">
+<dt>メール</dt>
+<dd>{{ customer.email }}</dd>
+<dt>電話番号</dt>
+<dd>{{ customer.phone|default:'—' }}</dd>
+<dt>住所</dt>
+<dd>{{ customer.address|default:'—' }}</dd>
+<dt>顧客メモ</dt>
+<dd class="note-text">{{ customer.notes|default:'—' }}</dd>
+</dl>
+</section>
+<section class="panel">
+<h2>関連する案件</h2>{% for inquiry in inquiries %}<p>
+<a href="{% url 'inquiry_detail' inquiry.pk %}">{{ inquiry.subject }}</a> <span class="badge-status">{{ inquiry.get_status_display }}</span>
+</p>{% empty %}<p class="empty">表示できる案件はありません。</p>{% endfor %}</section>
+</div>
+<aside>
+<section class="panel">
+<h2>対応履歴</h2>{% include 'crm/timeline.html' %}</section>{% if manager_role and customer.is_active %}<form method="post" action="{% url 'customer_archive' customer.pk %}">{% csrf_token %}<button type="submit" class="btn btn-outline-danger">顧客をアーカイブ</button>
+</form>{% endif %}</aside>
+</div>{% endblock %}

@@ -1,0 +1,21 @@
+{% load static %}<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>御見積書 {{ quote.quote_number }}</title>
+<link rel="stylesheet" href="{% static 'vendor/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+<main class="print-sheet">
+<p class="sample">SAMPLE / DEMO — 自主制作デモ / 架空データ</p>
+<h1 class="text-center mb-5">御見積書</h1>
+<p>{{ quote.inquiry.customer.name }} 様</p>
+<p>見積番号：{{ quote.quote_number }}<br>発行日：{{ quote.issued_on|date:'Y年m月d日' }}<br>有効期限：{{ quote.valid_until|date:'Y年m月d日'|default:'指定なし' }}</p>
+<h2>{{ quote.title }}</h2>{% include 'crm/quote_table.html' %}<hr>
+<p>LeadFlow デモリフォーム（架空）<br>本書は動作確認用です。契約・請求の効力はありません。</p>
+<p class="helptext">単一税率の消費税を小計から計算し、税額を1円単位で四捨五入しています。ブラウザーの印刷機能をご利用ください。</p>
+</main>
+</body>
+</html>

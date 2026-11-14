@@ -181,3 +181,7 @@ Next recommended task:
 ```
 
 Keep progress grounded in executed commands and committed changes. Do not invent percentages, test results or completion claims.
+
+## Implementation status
+
+See [PROGRESS.md](PROGRESS.md) for implemented phases, requirement traceability, executed checks and remaining limitations.

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}{% block content %}<div class="page-header">
+<div>
+<p class="eyebrow">営業状況の概要</p>
+<h1>{% if manager_role %}チームの営業状況{% else %}担当案件の状況{% endif %}</h1>
+<p class="muted">{{ user.get_full_name|default:user.username }} さん、次のアクションを確認しましょう。</p>
+</div>
+<a class="btn btn-primary" href="{% url 'inquiry_list' %}">案件一覧を開く</a>
+</div>
+<section class="panel">
+<form method="get" class="filters">{{ form.as_p }}<button type="submit" class="btn btn-primary">期間を適用</button>
+<a href="{% url 'dashboard' %}">全期間</a>
+</form>
+<p class="helptext">日本時間の受付日で案件を抽出（両端を含む）。顧客数は全期間の有効顧客。成約率 = 成約 ÷（成約 + 失注）。提出済見積は現在「提出済」のものです。</p>
+</section>
+<div class="metrics">{% for label,value in metrics %}<article class="metric">
+<span>{{ label }}</span>
+<strong>{{ value }}</strong>
+</article>{% endfor %}</div>
+<div class="two-col mt-3">
+<section class="panel">
+<h2>月別お問い合わせ</h2>{% if trend %}<div class="chart-box">
+<canvas id="trend-chart" role="img" aria-label="月別お問い合わせ件数。下の表にも同じデータを掲載。">
+</canvas>
+</div>
+<table class="table chart-fallback">
+<thead>
+<tr>
+<th>受付月</th>
+<th>件数</th>
+</tr>
+</thead>
+<tbody>{% for row in trend %}<tr>
+<td>{{ row.month|date:'Y年m月' }}</td>
+<td>{{ row.count }}</td>
+</tr>{% endfor %}</tbody>
+</table>{% else %}<p class="empty">この期間のお問い合わせはありません。</p>{% endif %}</section>
+<aside>{% if manager_role %}<section class="panel">
+<h2>未割当の受付</h2>{% for inquiry in queue %}<p>
+<a href="{% url 'inquiry_detail' inquiry.pk %}">{{ inquiry.subject }}</a>
+<br>
+<small>{{ inquiry.customer.name }} · {{ inquiry.created_at|date:'m/d' }}</small>
+</p>{% empty %}<p class="empty">未割当の案件はありません。</p>{% endfor %}<a href="{% url 'inquiry_list' %}?owner=unassigned">すべての未割当案件 →</a>
+</section>{% endif %}<section class="panel">
+<h2>期限超過のタスク</h2>{% for task in overdue_tasks %}<p>
+<a href="{% url 'inquiry_detail' task.inquiry_id %}">{{ task.title }}</a>
+<br>
+<small class="danger-text">期限 {{ task.due_date|date:'m/d' }}</small>
+</p>{% empty %}<p class="empty">期限を超過したタスクはありません。</p>{% endfor %}<a href="{% url 'schedule' %}">タスク・予定を確認 →</a>
+</section>
+</aside>
+</div>{{ chart|json_script:'trend-data' }}{% endblock %}{% block scripts %}{% load static %}<script src="{% static 'vendor/chart.umd.min.js' %}" defer>
+</script>
+<script src="{% static 'dashboard.js' %}" defer>
+</script>{% endblock %}

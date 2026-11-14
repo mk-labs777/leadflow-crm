@@ -1,0 +1,4 @@
+<div class="timeline">{% for activity in activities %}<article>
+<time>{{ activity.created_at|date:'Y/m/d H:i' }} · {% if activity.actor %}{{ activity.actor.get_full_name|default:activity.actor.username }}{% else %}システム{% endif %}</time>
+<p class="note-text mb-0">{{ activity.note }}</p>
+</article>{% empty %}<p class="empty">対応履歴はまだありません。</p>{% endfor %}</div>

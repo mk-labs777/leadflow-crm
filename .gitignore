@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# LeadFlow local outputs
+staticfiles/
+.pytest_cache/
+.env.*
+!.env.example
+node_modules/
+test-results/
+playwright-report/

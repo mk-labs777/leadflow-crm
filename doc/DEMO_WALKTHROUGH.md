@@ -1,0 +1,14 @@
+# LeadFlow demo walkthrough (3–5 minutes)
+
+**自主制作デモ / 架空データ**. Follow README setup, migrate, seed, and set private passwords for `demo-manager`, `demo-employee-1`, and `demo-employee-2`. Do not enter real personal information.
+
+1. **Intake (FR-03)** — Open `/inquiry/` in a private browser session. Enter `架空のデモ太郎`, `walkthrough@example.test`, kitchen/キッチン, subject `架空のキッチン改修`, and synthetic detail. Submit and see the generic thank-you. Submit again with differently cased email to verify one customer's two separate inquiries; no identity fields are overwritten.
+2. **Manager queue (FR-01/04)** — Sign in as `demo-manager`, open the unassigned queue from the dashboard, and locate that subject. Open it; customer/source/new status and the initial timeline entry are persisted. Assign `demo-employee-1`; a distinct assignment event appears. A manager can clear `重複候補・要確認` after investigating ambiguous matches.
+3. **Employee follow-up (FR-04/05/06)** — Sign in as `demo-employee-1` in another session, find the inquiry, set `初回対応済`, add a phone note, and register a future site inspection. Appointment dates are Japan time. Set inquiry status to `現地調査予定` deliberately. Edit the appointment to complete/cancel it if desired.
+4. **Quote (FR-07)** — Create a quotation with at least two rows. Example: 工事A quantity `1.25`, unit price `101`; 工事B quantity `2.00`, unit price `333`. Save: subtotal `792.25`, tax at 10% `79`, total `871.25`. Edit the quotation to `提出済`; inquiry status becomes `見積提出済` and the timeline records both changes. Open the print view; it contains a SAMPLE / DEMO label and no edit/navigation controls. Use browser Print/Save as PDF if wanted.
+5. **Tasks and outcome (FR-08/09)** — Add a task due yesterday. It appears overdue on the inquiry, task page and scoped dashboard. Complete it; the overdue count falls. Reopen it to check the inverse. Set the inquiry to `成約` (or `失注`) and refresh the dashboard to see database-backed conversion change.
+6. **Permissions (FR-01)** — Sign in as `demo-employee-2` and try the first employee's inquiry/quote URLs. They return 404; shared customers do not expose the first employee's notes. Anonymous dashboard access redirects to login. Staff without the Manager group cannot administer accounts.
+
+The dashboard uses inquiry **creation dates** in the selected inclusive Tokyo-date period; conversion is current won/(won+lost) within that cohort, N/A with no closed outcomes. Compare the filter results with the inquiry list. Check the empty state using a historical period with no records. The seed includes past creation months to make the real monthly chart demonstrable.
+
+Repeat `seed_demo` and verify that the intended 60 customers/inquiries and five employees are not doubled. Run `pytest -q` and the optional `tests/browser-smoke.cjs` as documented in README before reviewing the PR. No real communications are sent.

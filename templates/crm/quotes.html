@@ -1,0 +1,28 @@
+{% extends 'base.html' %}{% block content %}<p class="eyebrow">見積管理</p>
+<h1>見積書一覧</h1>
+<p class="muted">見積書は案件の詳細画面から作成できます。</p>
+<section class="panel">
+<div class="table-responsive">
+<table class="table">
+<thead>
+<tr>
+<th>見積番号 / 件名</th>
+<th>顧客</th>
+<th>発行日</th>
+<th>状況</th>
+<th>合計</th>
+</tr>
+</thead>
+<tbody>{% for quote in page_obj %}<tr>
+<td>
+<a href="{% url 'quote_detail' quote.pk %}">{{ quote.quote_number }}</a>
+<br>{{ quote.title }}</td>
+<td>{{ quote.inquiry.customer.name }}</td>
+<td>{{ quote.issued_on|date:'Y/m/d' }}</td>
+<td>{{ quote.get_status_display }}</td>
+<td>¥{{ quote.total }}</td>
+</tr>{% empty %}<tr>
+<td colspan="5" class="empty">見積書はまだありません。</td>
+</tr>{% endfor %}</tbody>
+</table>
+</div>{% include 'crm/pagination.html' %}</section>{% endblock %}

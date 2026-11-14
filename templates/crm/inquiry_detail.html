@@ -1,0 +1,68 @@
+{% extends 'base.html' %}{% block content %}<div class="page-header">
+<div>
+<p class="eyebrow">案件番号 #{{ inquiry.pk }}</p>
+<h1>{{ inquiry.subject }}</h1>
+<span class="badge-status">{{ inquiry.get_status_display }}</span> <span class="muted">{{ inquiry.get_service_category_display }} · {{ inquiry.get_source_display }}</span>
+</div>
+<a class="btn btn-outline-secondary" href="{% url 'inquiry_edit' inquiry.pk %}">案件を編集</a>
+</div>
+<div class="two-col">
+<div>
+<section class="panel">
+<h2>ご相談内容</h2>
+<dl class="detail-grid">
+<dt>顧客</dt>
+<dd>
+<a href="{% url 'customer_detail' inquiry.customer_id %}">{{ inquiry.customer.name }}</a>
+</dd>
+<dt>担当者</dt>
+<dd>{% if inquiry.owner %}{{ inquiry.owner.get_full_name|default:inquiry.owner.username }}{% else %}未割当{% endif %}</dd>
+<dt>受付日時</dt>
+<dd>{{ inquiry.created_at|date:'Y/m/d H:i' }}</dd>
+<dt>更新日時</dt>
+<dd>{{ inquiry.updated_at|date:'Y/m/d H:i' }}</dd>
+</dl>
+<p class="note-text">{{ inquiry.description }}</p>{% if inquiry.needs_review %}<p class="alert alert-warning">同一メールの顧客候補があります。管理者が確認してください。顧客情報の自動上書きは行っていません。</p>{% endif %}</section>
+<section class="panel">
+<div class="page-header">
+<h2>現地調査</h2>
+<a href="{% url 'appointment_create' inquiry.pk %}">＋ 予定を登録</a>
+</div>{% for appointment in appointments %}<p>
+<a href="{% url 'appointment_edit' inquiry.pk appointment.pk %}">{{ appointment.starts_at|date:'Y/m/d H:i' }} — {{ appointment.get_status_display }}</a>
+<br>
+<small>{{ appointment.location }} · {{ appointment.assigned_to.get_full_name|default:appointment.assigned_to.username }}</small>
+<br>{{ appointment.notes }}</p>{% empty %}<p class="empty">現地調査の予定はありません。</p>{% endfor %}</section>
+<section class="panel">
+<div class="page-header">
+<h2>見積書</h2>
+<a href="{% url 'quote_create' inquiry.pk %}">＋ 見積を作成</a>
+</div>{% for quote in quotes %}<p>
+<a href="{% url 'quote_detail' quote.pk %}">{{ quote.title }}</a> · {{ quote.get_status_display }} · ¥{{ quote.total }}</p>{% empty %}<p class="empty">見積書はまだありません。</p>{% endfor %}</section>
+<section class="panel">
+<div class="page-header">
+<h2>フォローアップ</h2>
+<a href="{% url 'task_create' inquiry.pk %}">＋ タスクを登録</a>
+</div>{% for task in tasks %}<div class="mb-3">
+<a href="{% url 'task_edit' inquiry.pk task.pk %}">{{ task.title }}</a> <small>期限 {{ task.due_date|date:'Y/m/d' }}</small>{% if task.is_overdue %} <span class="danger-text">期限超過</span>{% endif %}<p class="note-text">{{ task.note }}</p>
+<form class="inline" method="post" action="{% url 'task_toggle' task.pk %}">{% csrf_token %}<button type="submit" class="btn btn-sm btn-outline-secondary">{% if task.completed_at %}再開する{% else %}完了にする{% endif %}</button>
+</form>{% if task.completed_at %}<small>完了済</small>{% endif %}</div>{% empty %}<p class="empty">タスクはありません。</p>{% endfor %}</section>
+<section class="panel">
+<h2>対応履歴</h2>{% include 'crm/timeline.html' %}</section>
+</div>
+<aside>
+<section class="panel form-panel">
+<h2>対応状況の更新</h2>
+<form method="post" action="{% url 'inquiry_action' inquiry.pk 'status' %}">{% csrf_token %}{{ status_form.as_p }}<button type="submit" class="btn btn-primary">状況を更新</button>
+</form>
+</section>{% if assignment_form %}<section class="panel form-panel">
+<h2>担当者の割当</h2>
+<form method="post" action="{% url 'inquiry_action' inquiry.pk 'assign' %}">{% csrf_token %}{{ assignment_form.as_p }}<button type="submit" class="btn btn-primary">割当を保存</button>
+</form>
+<p class="helptext">担当変更後、旧担当者はこの案件を閲覧できません。既存タスク・予定の担当も確認してください。</p>
+</section>{% endif %}<section class="panel form-panel">
+<h2>対応を記録</h2>
+<form method="post" action="{% url 'inquiry_action' inquiry.pk 'note' %}">{% csrf_token %}{{ note_form.as_p }}<button type="submit" class="btn btn-primary">記録する</button>
+</form>
+</section>
+</aside>
+</div>{% endblock %}

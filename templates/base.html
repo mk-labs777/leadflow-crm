@@ -1,0 +1,27 @@
+{% load static %}<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}LeadFlow CRM{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'vendor/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<div class="demo-notice">自主制作デモ / 架空データ — 実在する個人情報を入力しないでください</div>
+<header class="topbar">
+<a class="brand" href="{% url 'home' %}">Lead<span>Flow</span> <small>CRM</small>
+</a>
+<nav aria-label="メインナビゲーション">
+{% if user.is_authenticated %}<a href="{% url 'dashboard' %}">概要</a>
+<a href="{% url 'customer_list' %}">顧客</a>
+<a href="{% url 'inquiry_list' %}">案件</a>
+<a href="{% url 'quote_list' %}">見積</a>
+<a href="{% url 'schedule' %}">タスク・予定</a>{% if manager_role and user.is_staff %}<a href="/admin/">管理</a>{% endif %}{% endif %}<a href="{% url 'public_intake' %}">公開フォーム</a>
+{% if user.is_authenticated %}<form method="post" action="{% url 'logout' %}" class="inline">{% csrf_token %}<button class="nav-button" type="submit">ログアウト</button>
+</form>{% else %}<a href="{% url 'login' %}">社内ログイン</a>{% endif %}</nav>
+</header>
+<main id="content" class="container-fluid workspace" tabindex="-1">{% for message in messages %}<div class="alert alert-success" role="status">{{ message }}</div>{% endfor %}{% block content %}{% endblock %}</main>
+<footer>LeadFlow · 架空のリフォーム会社向け業務デモ · 日時は日本時間</footer>{% block scripts %}{% endblock %}</body>
+</html>

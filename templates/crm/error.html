@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block content %}<section class="panel">
+<h1>リクエストを処理できません</h1>
+<p>{{ message }}</p>
+<a href="{% url 'home' %}">ホームに戻る</a>
+</section>{% endblock %}

@@ -1,0 +1,25 @@
+<div class="table-responsive">
+<table class="table">
+<thead>
+<tr>
+<th>工事内容</th>
+<th>数量</th>
+<th>単価</th>
+<th>金額</th>
+</tr>
+</thead>
+<tbody>{% for item in quote.items.all %}<tr>
+<td>{{ item.description }}</td>
+<td>{{ item.quantity }}</td>
+<td>¥{{ item.unit_price }}</td>
+<td>¥{{ item.line_amount }}</td>
+</tr>{% endfor %}</tbody>
+</table>
+</div>
+<dl class="detail-grid">
+<dt>小計</dt>
+<dd>¥{{ quote.subtotal }}</dd>
+<dt>消費税 {{ tax_percent|floatformat:'-1' }}%</dt>
+<dd>¥{{ quote.tax_amount }}</dd>
+</dl>
+<p class="quote-total">合計 ¥{{ quote.total }}</p>

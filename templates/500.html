@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block content %}<section class="panel">
+<h1>リクエストを処理できません（500）</h1>
+<p>アクセス権限やページの場所を確認して、もう一度お試しください。</p>
+<a href="{% url 'home' %}">ホームへ戻る</a>
+</section>{% endblock %}

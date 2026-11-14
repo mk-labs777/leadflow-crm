@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block content %}<section class="hero">
+<p class="eyebrow">お問い合わせ → 信頼づくり → 次のご提案</p>
+<h1>お問い合わせから、<br>次の一歩が見える。</h1>
+<p>受付・現地調査・見積・フォローアップをひとつの場所に。<br>小さなリフォーム会社の営業を支える、日本語のCRMデモです。</p>
+<div class="actions">
+<a class="btn btn-primary" href="{% url 'dashboard' %}">CRMを開く</a>
+<a class="btn btn-outline-secondary" href="{% url 'public_intake' %}">架空のお問い合わせを送る</a>
+</div>
+<p class="muted">
+<small>自主制作デモ / 架空データ。実在の企業による導入事例ではありません。実際のメール送信は行いません。</small>
+</p>
+</section>{% endblock %}

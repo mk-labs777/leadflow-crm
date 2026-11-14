@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% block content %}<div class="page-header">
+<div>
+<p class="eyebrow">{{ quote.quote_number }}</p>
+<h1>{{ quote.title }}</h1>
+<span class="badge-status">{{ quote.get_status_display }}</span>
+</div>
+<div class="actions">
+<a class="btn btn-outline-secondary" href="{% url 'quote_edit' quote.inquiry_id quote.pk %}">見積を編集</a>
+<a class="btn btn-primary" href="{% url 'quote_print' quote.pk %}" target="_blank" rel="noopener">印刷用の見積書</a>
+</div>
+</div>
+<section class="panel">
+<p>
+<a href="{% url 'inquiry_detail' quote.inquiry_id %}">{{ quote.inquiry.subject }}</a> / {{ quote.inquiry.customer.name }} 様</p>
+<p>発行日 {{ quote.issued_on|date:'Y/m/d' }}{% if quote.valid_until %} · 有効期限 {{ quote.valid_until|date:'Y/m/d' }}{% endif %}</p>{% include 'crm/quote_table.html' %}<p class="sample">SAMPLE / DEMO — 自主制作デモ / 架空データ</p>
+</section>{% endblock %}

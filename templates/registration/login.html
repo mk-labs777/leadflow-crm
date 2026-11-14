@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% block content %}<p class="eyebrow">社内システム</p>
+<h1>社内ログイン</h1>
+<p class="muted">管理者から発行されたアカウントでログインしてください。</p>
+<section class="panel form-panel">
+<form method="post">{% csrf_token %}{{ form.as_p }}<input type="hidden" name="next" value="{{ next }}">
+<button type="submit" class="btn btn-primary">ログイン</button>
+</form>
+</section>{% endblock %}

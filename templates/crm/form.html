@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block content %}<div class="page-header">
+<div>
+<p class="eyebrow">LeadFlow / {% if public %}公開デモ{% else %}業務管理{% endif %}</p>
+<h1>{{ title }}</h1>{% if public %}<p>架空の情報だけを入力してください。実際の工事のご依頼やメール送信は行いません。</p>{% endif %}{% if hint %}<p class="muted">{{ hint }}</p>{% endif %}</div>
+</div>
+<section class="panel form-panel">
+<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit" class="btn btn-primary">{% if public %}デモのお問い合わせを送信{% else %}保存する{% endif %}</button>
+</form>
+</section>{% endblock %}
