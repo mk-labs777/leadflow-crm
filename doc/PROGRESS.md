@@ -39,3 +39,13 @@ The standard Compose build in this cloud session initially failed with `CERTIFIC
 - Public-facing deployment, TLS termination, static-file hosting in non-debug mode, shared abuse controls, backup/restore, monitoring and real-person privacy review remain outside this local portfolio task. No external deployment or real communications occurred.
 - P1 CSV import/export, advanced reporting and native PDF remain intentionally deferred. Printable HTML supports browser PDF printing.
 - Remote GitHub Actions execution is not verified by local checks. The workflow is committed. PR/push results will be reported in the task handoff; nothing is merged automatically.
+
+## GitHub handoff result
+
+Implementation commit `1d2d1d1` was pushed successfully to [`codex/leadflow-crm`](https://github.com/mk-labs777/leadflow-crm/tree/codex/leadflow-crm). `gh pr create --repo mk-labs777/leadflow-crm --base main --head codex/leadflow-crm` failed with the exact error:
+
+```text
+Post "https://api.github.com/graphql": Forbidden
+```
+
+No PR was created by the command and nothing was merged. The prepared [pull-request description](PULL_REQUEST.md) is preserved for manual creation using [GitHub's branch PR page](https://github.com/mk-labs777/leadflow-crm/pull/new/codex/leadflow-crm). No tokens were requested or copied; Git reads/push work independently of GitHub API access.
